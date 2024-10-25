@@ -1,9 +1,12 @@
 {
   "name": "@gallolabs/nanodate",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "description": "Node Date with nanoseconds precision instead of milliseconds",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rm -Rf dist && tsc",
+    "test": "npm run build && npx c8 --all --src 'src' --exclude '*/*test*' --report-dir=/tmp/nyc mocha 'dist/*test*.js'",
+    "deploy": "npm run test && rm dist/*test* && npm login && trap 'npm logout' EXIT && release-it --no-git.requireCleanWorkingDir"
   },
   "author": "",
   "type": "module",
@@ -11,5 +14,22 @@
   "description": "",
   "dependencies": {
     "node-system-time": "^0.1.1"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "workspaces": [
+    "."
+  ],
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.10.4",
+    "c8": "^8.0.1",
+    "mocha": "^10.2.0",
+    "release-it": "^17.0.1",
+    "typescript": "^5.3.3"
   }
 }

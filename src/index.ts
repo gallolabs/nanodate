@@ -1,8 +1,13 @@
+// @ts-ignore
 import nanotime from 'node-system-time'
 
-class NanoDate extends Date {
-    constructor(value) {
+export default class NanoDate extends Date {
+    protected ns: number = 0
+    constructor(value?: bigint | string | object)
+    constructor(year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ns?: number)
+    constructor() {
         let nanoTimestamp
+        const value = arguments[0]
 
         if (!value) {
             nanoTimestamp = nanotime.getTimestamp()
@@ -26,29 +31,31 @@ class NanoDate extends Date {
 
         } else {
             if (arguments.length > 1) {
-                super(...arguments)
-                this.ns = arguments[7] || 0
+                super(arguments[0], arguments[1], arguments[2] || 1, arguments[3] || 0, arguments[4] || 0, arguments[5] || 0, arguments[6] || 0)
+                this.ns = arguments[6] || 0
             } else if (typeof value === 'string') {
                 super(value)
-                this.ns = (value.match(/(\d{9})Z$/) || [0, 0])[1]
+                this.ns = parseInt((value.match(/(\d{9})Z$/) || ['0', '0'])[1], 10)
             } else if (value instanceof Object) {
                 super(value)
                 this.ns = value.ns || value.milliseconds * 1000000 || 0
             }
         }
     }
+    // @ts-ignore
     getTime() {
         return BigInt(super.getTime().toString() + this.ns.toString().substring(3))
     }
     toISOString() {
         return super.toISOString().replace('Z', `${this.ns.toString().substring(3).padStart(6, '0')}Z`)
     }
-    setMilliseconds(ms) {
+    // Please dont call me, second fraction is now nanoseconds
+    setMilliseconds(ms: number) {
         const v = super.setMilliseconds(ms)
         this.ns = ms * 1000000
         return v
     }
-    setNanoseconds(ns) {
+    setNanoseconds(ns: number) {
         this.setMilliseconds(Math.floor(ns / 1000000))
         this.ns = ns
         return ns
@@ -57,32 +64,3 @@ class NanoDate extends Date {
         return this.ns
     }
 }
-
-const nanodate = new NanoDate
-const date = new Date
-
-console.log(date.toJSON(), nanodate.toJSON())
-console.log(date.getTime(), nanodate.getTime())
-console.log(date.toString(), nanodate.toString())
-console.log(date.toLocaleString(), nanodate.toLocaleString())
-
-console.log(date.toISOString(), nanodate.toISOString())
-
-console.log(date, nanodate)
-
-nanodate.setMilliseconds(555)
-
-console.log(nanodate.toJSON(), nanodate.getMilliseconds(), nanodate.getNanoseconds())
-
-nanodate.setNanoseconds(123555777)
-
-console.log(nanodate.toJSON(), nanodate.getMilliseconds(), nanodate.getNanoseconds())
-
-const nanodate2 = new NanoDate('2024-10-25T22:46:17.894315765Z')
-
-console.log(nanodate2.toJSON())
-
-const nanodate3 = new NanoDate(1729896770263078650n)
-
-console.log(nanodate3.toJSON())
-
