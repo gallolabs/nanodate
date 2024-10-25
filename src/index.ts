@@ -3,7 +3,7 @@ import nanotime from 'node-system-time'
 
 export default class NanoDate extends Date {
     protected ns: number = 0
-    constructor(value?: bigint | string | object)
+    constructor(value?: bigint | string | object | number)
     constructor(year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ns?: number)
     constructor() {
         let nanoTimestamp
@@ -13,7 +13,7 @@ export default class NanoDate extends Date {
             nanoTimestamp = nanotime.getTimestamp()
         } else {
             if (typeof value === 'number') {
-                throw new Error('Number is not supported')
+                nanoTimestamp = BigInt(value)
             }
 
             if (typeof value === 'bigint') {

@@ -29,3 +29,7 @@ const nanodate3 = new NanoDate(1729896770263078650n)
 console.log(nanodate3.toJSON())
 console.log(nanodate3.getTime())
 console.log(+nanodate3)
+
+const nanodate4 = new NanoDate(+nanodate3)
+
+console.log(nanodate4.toJSON())
