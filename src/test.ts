@@ -28,3 +28,4 @@ const nanodate3 = new NanoDate(1729896770263078650n)
 
 console.log(nanodate3.toJSON())
 
+console.log(nanodate3.valueOf())
