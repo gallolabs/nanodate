@@ -63,8 +63,7 @@ export default class NanoDate extends Date {
     getNanoseconds() {
         return this.ns
     }
-    // @ts-ignore
     valueOf() {
-        return this.getTime()
+        return Number(this.getTime())
     }
 }
