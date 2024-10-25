@@ -1,8 +1,8 @@
 {
   "name": "@gallolabs/nanodate",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "main": "dist/index.js",
-  "description": "Node Date with nanoseconds precision instead of milliseconds",
+  "description": "",
   "scripts": {
     "build": "rm -Rf dist && tsc",
     "test": "npm run build && npx c8 --all --src 'src' --exclude '*/*test*' --report-dir=/tmp/nyc mocha 'dist/*test*.js'",
@@ -11,7 +11,6 @@
   "author": "",
   "type": "module",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "node-system-time": "^0.1.1"
   },
