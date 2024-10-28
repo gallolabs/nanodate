@@ -9,16 +9,19 @@ export default class NanoDate extends Date {
         let nanoTimestamp
         const value = arguments[0]
 
-        if (!value) {
-            nanoTimestamp = nanotime.getTimestamp()
-        } else {
-            if (typeof value === 'number') {
-                nanoTimestamp = BigInt(value)
+        if (arguments.length < 2) {
+            if (!value) {
+                nanoTimestamp = nanotime.getTimestamp()
+            } else {
+                if (typeof value === 'number') {
+                    nanoTimestamp = BigInt(value)
+                }
+
+                if (typeof value === 'bigint') {
+                    nanoTimestamp = value
+                }
             }
 
-            if (typeof value === 'bigint') {
-                nanoTimestamp = value
-            }
         }
 
         if (nanoTimestamp) {
@@ -31,11 +34,23 @@ export default class NanoDate extends Date {
 
         } else {
             if (arguments.length > 1) {
-                super(arguments[0], arguments[1], arguments[2] || 1, arguments[3] || 0, arguments[4] || 0, arguments[5] || 0, arguments[6] || 0)
-                this.ns = arguments[6] || 0
+                const args = [...arguments]
+                // if (args.includes(undefined)) {
+                //     const rest = args.splice(args.indexOf(undefined), 6)
+                //     if (rest.some(v => v !== undefined)){
+                //         throw new Error('Cannot set value after undefined arg')
+                //     }
+                // }
+
+                if (arguments[6] !== undefined) {
+                    args[6] = Math.floor(args[6] / 1000000)
+                }
+                // @ts-ignore
+                super(...args)
+                this.ns = arguments[6] || 0n
             } else if (typeof value === 'string') {
                 super(value)
-                this.ns = parseInt((value.match(/(\d{9})Z$/) || ['0', '0'])[1], 10)
+                this.ns = parseInt((value.match(/\.(\d{1,9})/) || ['0', '0'])[1].padEnd(9, '0'), 10)
             } else if (value instanceof Object) {
                 super(value)
                 this.ns = value.ns || value.milliseconds * 1000000 || 0
@@ -44,7 +59,7 @@ export default class NanoDate extends Date {
     }
     // @ts-ignore
     getTime() {
-        return BigInt(super.getTime().toString() + this.ns.toString().substring(3))
+        return isNaN(super.getTime()) ? NaN : BigInt(super.getTime().toString() + this.ns.toString().substring(3).padStart(6, '0'))
     }
     toISOString() {
         return super.toISOString().replace('Z', `${this.ns.toString().substring(3).padStart(6, '0')}Z`)
@@ -65,5 +80,15 @@ export default class NanoDate extends Date {
     }
     valueOf() {
         return Number(this.getTime())
+    }
+    static now() {
+        return (new NanoDate).getTime()
+    }
+    static UTC(year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ns?: number): bigint
+    static UTC() {
+        return (new NanoDate(...arguments)).getTime()
+    }
+    static parse(dateString: string) {
+        return (new NanoDate(dateString)).getTime()
     }
 }
