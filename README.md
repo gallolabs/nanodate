@@ -15,3 +15,5 @@ console.log(nanodate.toJSON())
 console.log(nanodate.getTime())
 // 1729898417176787742n
 ```
+
+Warning : Currently NanoDate extends Date. But there are some interface incompatibilies and as the returned values are not the same (and not always the same type), this can broke Date consumers. I think I will stop to extend Date and implement all the Date methods to keep NanoDate as Date for humans but not as instanceof Date.

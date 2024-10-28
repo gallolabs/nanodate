@@ -3,7 +3,7 @@ import nanotime from 'node-system-time'
 
 export default class NanoDate extends Date {
     protected ns: number = 0
-    constructor(value?: bigint | string | object | number)
+    constructor(value?: bigint | string | number | Date | NanoDate)
     constructor(year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ns?: number)
     constructor() {
         let nanoTimestamp
@@ -13,6 +13,10 @@ export default class NanoDate extends Date {
             if (!value) {
                 nanoTimestamp = nanotime.getTimestamp()
             } else {
+                if (value instanceof NanoDate || value instanceof Date) {
+                    nanoTimestamp = BigInt(value.getTime())
+                }
+
                 if (typeof value === 'number') {
                     nanoTimestamp = BigInt(value)
                 }
@@ -51,9 +55,6 @@ export default class NanoDate extends Date {
             } else if (typeof value === 'string') {
                 super(value)
                 this.ns = parseInt((value.match(/\.(\d{1,9})/) || ['0', '0'])[1].padEnd(9, '0'), 10)
-            } else if (value instanceof Object) {
-                super(value)
-                this.ns = value.ns || value.milliseconds * 1000000 || 0
             }
         }
     }
@@ -64,14 +65,14 @@ export default class NanoDate extends Date {
     toISOString() {
         return super.toISOString().replace('Z', `${this.ns.toString().substring(3).padStart(6, '0')}Z`)
     }
-    // Please dont call me, second fraction is now nanoseconds
-    setMilliseconds(ms: number) {
-        const v = super.setMilliseconds(ms)
-        this.ns = ms * 1000000
-        return v
+    getMilliseconds(): number {
+        throw new Error('To destroy')
+    }
+    setMilliseconds(): number {
+        throw new Error('To destroy')
     }
     setNanoseconds(ns: number) {
-        this.setMilliseconds(Math.floor(ns / 1000000))
+        super.setMilliseconds(Math.floor(ns / 1000000))
         this.ns = ns
         return ns
     }

@@ -51,10 +51,6 @@ describe('NanoDate', () => {
 
 		console.log(date, nanodate)
 
-		nanodate.setMilliseconds(555)
-
-		console.log(nanodate.toJSON(), nanodate.getMilliseconds(), nanodate.getNanoseconds())
-
 		nanodate.setNanoseconds(123555777)
 
 		console.log(nanodate.toJSON(), nanodate.getMilliseconds(), nanodate.getNanoseconds())
