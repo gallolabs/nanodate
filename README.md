@@ -14,6 +14,15 @@ console.log(nanodate.toJSON())
 
 console.log(nanodate.getTime())
 // 1729898417176787742n
+
+const nanodate = new NanoDate('2024-10-25T22:46:17.894315765+02:00')
+
+console.log(nanodate.toJSON())
+// 2024-10-25T20:46:17.894315765Z
+
+nanodate.setYear(2023)
+NanoDate.now()
+// ... Date compatible excepts get/setMilliseconds migrated to get/setNanoseconds
 ```
 
 Warning : Currently NanoDate extends Date. But there are some interface incompatibilies and as the returned values are not the same (and not always the same type), this can broke Date consumers. I think I will stop to extend Date and implement all the Date methods to keep NanoDate as Date for humans but not as instanceof Date.

@@ -2,7 +2,7 @@
   "name": "@gallolabs/nanodate",
   "version": "0.2.4",
   "main": "dist/index.js",
-  "description": "",
+  "description": "A javascript Date with nano precision",
   "scripts": {
     "build": "rm -Rf dist && tsc",
     "test": "npm run build && npx c8 --all --src 'src' --exclude '*/*test*' --report-dir=/tmp/nyc mocha 'dist/*test*.js'",
