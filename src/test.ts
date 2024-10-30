@@ -37,6 +37,12 @@ describe('NanoDate', () => {
 		assert.strictEqual(nanodate.toJSON(), '2024-10-25T22:46:17.123456000Z')
 	})
 
+	it('construct with 0 beginning fraction', () => {
+		const nanodate = new NanoDate('2024-10-25T22:46:17.023456341Z')
+
+		assert.strictEqual(nanodate.toJSON(), '2024-10-25T22:46:17.023456341Z')
+	})
+
 	it('to split', () => {
 
 		const nanodate = new NanoDate
