@@ -71,7 +71,7 @@ describe('NanoDate', () => {
 
 		console.log(nanodate4.toJSON())
 
-		console.log(NanoDate.now())
+		console.log(NanoDate.now(), 'now')
 
 		console.log(NanoDate.UTC(2023, 4))
 
@@ -103,6 +103,8 @@ describe('NanoDate', () => {
 		bench('nanodate format', () => (new NanoDate).toISOString())
 		bench('nanodate getTime', () => (new NanoDate).getTime())
 		bench('date getTime', () => (new Date).getTime())
+		bench('date now', () => Date.now())
+		bench('nanodate now', () => NanoDate.now())
 	})
 
 })

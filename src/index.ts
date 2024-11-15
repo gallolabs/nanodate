@@ -85,8 +85,8 @@ export default class NanoDate extends Date {
     valueOf() {
         return Number(this.getTime())
     }
-    static now() {
-        return (new NanoDate).getTime()
+    static now(): BigInt {
+        return nanotime.getTimestamp()
     }
     static UTC(year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ns?: number): bigint
     static UTC() {

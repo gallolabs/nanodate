@@ -33,11 +33,13 @@ NanoDate.now()
 - Nanodate is good to have more precision than milliseconds and two Nanodate instanciation cannot have the same nanoseconds (a priori). It is so a good timestamp for nearby events, like logs, to ensure the order.
 
 ### Precision (with a small piece of code, on my PC with WSL) :
+- Nanodate now() ~ 122ns <=> 0.15 µs <=> 0.00015 ms precision (6500x Date)
 - Nanodate instanciation ~ 430ns <=> 0.5 µs <=> 0.0005 ms precision (2000x Date)
 - Nanodate instanciation + get time ~ 827ns <=> 1 µs <=> 0.001 ms precision (1000x Date)
 - Nanodate instanciation + format as string ~ 1500ns <=> 2 µs <=> 0.002 ms precision (500x Date)
 
 ### Cost
+- Nanodate now() ~ 122ns vs Date 79ns (x1.5) vs hrtime bigint 141ns (0.9x)
 - Nanodate instanciation ~ 430ns vs Date 175ns (x2.5) vs hrtime bigint 141ns (x3)
 - Nanodate instanciation + get time ~ 827ns vs Date 150ns (x5.5)
 - Nanodate instanciation + format as string ~ 1500ns vs Date 994ns (x1.5)
