@@ -60,10 +60,13 @@ export default class NanoDate extends Date {
     }
     // @ts-ignore
     getTime() {
-        return isNaN(super.getTime()) ? NaN : BigInt(super.getTime().toString() + this.ns.toString().padStart(9, '0').substring(3))
+        const s = super.getTime()
+        return isNaN(s)
+            ? NaN
+            : BigInt(s.toString() + this.ns.toString().padStart(9, '0').substring(3))
     }
     toISOString() {
-        return super.toISOString().replace('Z', `${this.ns.toString().padStart(9, '0').substring(3)}Z`)
+        return super.toISOString().slice(0, 23) + `${this.ns.toString().padStart(9, '0').substring(3)}Z`
     }
     getMilliseconds(): number {
         throw new Error('To destroy')

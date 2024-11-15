@@ -79,4 +79,30 @@ describe('NanoDate', () => {
 
 	})
 
+	it('bench', () => {
+		function bench(what: string, fn: Function) {
+			const iterations = 50000
+			fn()
+
+			const start = process.hrtime.bigint()
+
+			for(var i=0; i<iterations; i++) {
+				fn()
+			}
+
+			const end = process.hrtime.bigint()
+			const timeForOne = (end - start) / BigInt(iterations)
+			console.log(what, Number(timeForOne) + 'ns')
+		}
+		bench('hotload', () => {})
+		bench('fn', () => {})
+		bench('hrtime', () => process.hrtime.bigint())
+		bench('date', () => new Date)
+		bench('nanodate', () => new NanoDate)
+		bench('date format', () => (new Date).toISOString())
+		bench('nanodate format', () => (new NanoDate).toISOString())
+		bench('nanodate getTime', () => (new NanoDate).getTime())
+		bench('date getTime', () => (new Date).getTime())
+	})
+
 })
